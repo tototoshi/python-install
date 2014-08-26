@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -e
+
+PREFIX=
+VERSION=
+
+WORKDIR=$(mktemp -t temp.XXXXXX)
+rm "$WORKDIR"
+mkdir "$WORKDIR"
+__cleanup () {
+    rm -rf "$WORKDIR"
+}
+trap __cleanup EXIT
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --prefix)
+            PREFIX=$2
+            shift
+            shift
+            ;;
+        *)
+            VERSION=$1
+            shift
+            ;;
+    esac
+done
+
+if [ "$VERSION" == "" ]; then
+    echo "VERSION required"
+    exit 1
+fi
+
+if [ "$PREFIX" == "" ]; then
+    OPTION_PREFIX=
+else
+    OPTION_PREFIX="--prefix=$PREFIX"
+fi
+
+(
+    cd "$WORKDIR"
+
+    wget -O Python-${VERSION}.tgz https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz
+
+    tar xf Python-${VERSION}.tgz
+
+    cd Python-${VERSION}
+
+    ./configure $OPTION_PREFIX && make && make install
+
+    if echo "$VERSION" | grep '^2' > /dev/null; then
+        wget -O ex_setup.py http://peak.telecommunity.com/dist/ez_setup.py
+
+        $PREFIX/bin/python ex_setup.py
+
+        $PREFIX/bin/easy_install pip
+
+        $PREFIX/bin/pip install virtualenv
+    fi
+
+    if echo "$VERSION" | grep '^3' > /dev/null; then
+        $PREFIX/bin/pip3 install virtualenv
+    fi
+
+
+
+)
+
