@@ -1,4 +1,4 @@
-# php-install
+# python-install
 
 My Python installer
 
