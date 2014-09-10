@@ -49,9 +49,9 @@ fi
     ./configure $OPTION_PREFIX && make && make install
 
     if echo "$VERSION" | grep '^2' > /dev/null; then
-        wget -O ex_setup.py http://peak.telecommunity.com/dist/ez_setup.py
+        wget -O ez_setup.py http://peak.telecommunity.com/dist/ez_setup.py
 
-        $PREFIX/bin/python ex_setup.py
+        $PREFIX/bin/python ez_setup.py
 
         $PREFIX/bin/easy_install pip
 
