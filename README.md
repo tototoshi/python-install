@@ -11,6 +11,6 @@ curl https://raw.githubusercontent.com/tototoshi/python-install/master/python-in
 ##Usage
 
 ```
-# aptitude install -y build-essential
+# aptitude install -y build-essential libssl-dev
 python-install --prefix $HOME/opt/python-3.4.1 3.4.1
 ```
